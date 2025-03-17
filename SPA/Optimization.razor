@@ -1,0 +1,240 @@
+@inherits OptimizationBase
+@page "/settings"
+@using Project.Models.Shared.Product;
+@using Position = Syncfusion.Blazor.Popups.Position
+<NavigationLock OnBeforeInternalNavigation="OnBeforeNavigationHandler" ConfirmExternalNavigation="@StateHasChanges()"/>
+<PageTitle>OP | @Localizer["#OPTIMIZATION"]</PageTitle>
+<div class="col-12 col-lg-10 col-xl-8">
+    <h3 class="Project-header">@Localizer["#OPTIMIZATION"]</h3>
+    <hr class="section-divider"/>
+</div>
+
+@if (Loading)
+{
+    <Spinner/>
+}
+
+@if (!Loading)
+{
+    <div class="Project-content col-12 col-lg-10 col-xl-8">
+        <section>
+            <div>
+                @{
+                    var pickslotTooltip = $"{Localizer["#LASTMODIFIEDBY"]}: <i>{PickSlotOptions.UpdatedByDisplayName}</i>. <br> {Localizer["#LASTMODIFIEDAT"]}: <i>{PickSlotOptions.UpdatedAtDisplayName}.</i>";
+                }
+                <SfTooltip Target="#PickslotLabel" Content="@pickslotTooltip" Position="@Syncfusion.Blazor.Popups.Position.BottomLeft" OffsetX="30"></SfTooltip>
+                <h5 id="PickslotLabel" class="Project-header">@Localizer["#PICKSLOT"]</h5>
+            </div>
+            <div class="Project-content">
+                <div class="row mb-3">
+                    <h6>@Localizer["#PICKSLOTLENGTH"]</h6>
+                    <label class="form-label">@Localizer["#PICKSLOTLENGTHINFO"]</label>
+                    <div class="d-flex col-12 col-lg-8 col-xl-6">
+                        <SfNumericTextBox ID="timespanhours" @bind-Value="PickSlotOptions.TimeSpanHours" Min="0" TValue="int" Step="1" CssClass="me-2" Placeholder="@Localizer["#HOURS"]" FloatLabelType="FloatLabelType.Auto"/>
+                        <SfNumericTextBox ID="timespanminutes" @bind-Value="PickSlotOptions.TimeSpanMinutes" Min="0" TValue="int" Step="1" CssClass="me-2" Placeholder="@Localizer["#MINUTES"]" FloatLabelType="FloatLabelType.Auto"/>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <h6>@Localizer["#PICKSLOTTIMEMARGIN"]</h6>
+                    <label class="form-label">@Localizer["#PICKSLOTTIMEMARGININFO"]</label>
+                    <div class=" d-flex col-12 col-lg-8 col-xl-6">
+                        <SfNumericTextBox ID="timemarginhours" @bind-Value="PickSlotOptions.MarginHours" Min="0" TValue="int" Step="1" CssClass="me-2" Placeholder="@Localizer["#HOURS"]" FloatLabelType="FloatLabelType.Auto"/>
+                        <SfNumericTextBox ID="timemarginminutes" @bind-Value="PickSlotOptions.MarginMinutes" Min="0" TValue="int" Step="1" CssClass="me-2" Placeholder="@Localizer["#MINUTES"]" FloatLabelType="FloatLabelType.Auto"/>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <h6>@Localizer["#AUTOMATICALLYUPDATEPICKSLOTSETTING"]</h6>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <SfSwitch ID="autoupdate" @bind-Checked="PickSlotOptions.AutoUpdatePickSlot" CssClass="me-2"/>
+                        </div>
+                        <label for="autoupdate" class="custom-control-label">@Localizer["#AUTOMATICALLYUPDATEPICKSLOTSETTINGINFO"]</label>
+                        <ProjectTooltip TooltipText="@Localizer["#PICKSLOTTIMEMARGINTOOLTIP"]"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider"/>
+        <section>
+            <div>
+                @{
+                    var appflowTooltip = $"{Localizer["#LASTMODIFIEDBY"]}: <i>{AppFlowOptions.UpdatedByDisplayName}</i>. <br> {Localizer["#LASTMODIFIEDAT"]}: <i>{AppFlowOptions.UpdatedAtDisplayName}.</i>";
+                }
+                <SfTooltip Target="#AppFlowLabel" Content="@appflowTooltip" Position="Syncfusion.Blazor.Popups.Position.BottomLeft" OffsetX="30"></SfTooltip>
+                <h5 id="AppFlowLabel" class="Project-header">@Localizer["#APPFLOWOPTIONS"]</h5>
+            </div>
+
+            <div class="Project-content">
+                <div class="row mb-3">
+                    <h6>@Localizer["#USEPRINTERCENTRICAPPFLOWSETTING"]</h6>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <SfSwitch ID="printercentricflow" @bind-Checked="AppFlowOptions.UsePrinterCentricWorkflow" CssClass="me-2"/>
+                        </div>
+                        <label for="printercentricflow" class="custom-control-label">@Localizer["#USEPRINTERCENTRICAPPFLOWSETTINGINFO"]</label>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <h6>@Localizer["#REGISTERTYPEPOSTPICK"]</h6>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <SfSwitch ID="registerTypePostPick" @bind-Checked="AppFlowOptions.RegisterTypePostPick" CssClass="me-2"/>
+                        </div>
+                        <label for="registerTypePostPick" class="custom-control-label">@Localizer["#REGISTERTYPEPOSTPICK"]</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider"/>
+        <section>
+		<!-- code -->
+            <div>
+                @{
+                    var externalCarrierIdTooltip = $"{Localizer["#LASTMODIFIEDBY"]}: <i>{ExternalCarrierIdOptions.UpdatedByDisplayName}</i>. <br> {Localizer["#LASTMODIFIEDAT"]}: <i>{ExternalCarrierIdOptions.UpdatedAtDisplayName}.</i>";
+                }
+                <SfTooltip Target="#externalCarrierIdLabel" Content="@externalCarrierIdTooltip" Position="Syncfusion.Blazor.Popups.Position.BottomLeft" OffsetX="30"></SfTooltip>
+                <h5 id="externalCarrierIdLabel" class="Project-header">@Localizer["#EXTERNALCARRIERIDENTIFIER"]</h5>
+            </div>
+            <div class="Project-content">
+                <div class="d-flex">
+                    <h6>@Localizer["#USEEXTERNALCARRIERID"]</h6>
+                    <div hidden="@ExternalCarrierIdOptions.SiteOverride" class="mx-1 opacity-50">
+                        <Spa.Client.Shared.Icons.TenantLock Width="20" Height="20" Title="@Localizer["#LOCKEDONTENANTLEVEL"]" CssClass="align-text-top"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="d-flex">
+                        <div>
+                            <SfSwitch ID="externalCarrierId" @bind-Checked="ExternalCarrierIdOptions.UseExternalCarrierId" Disabled="@(!ExternalCarrierIdOptions.SiteOverride)" CssClass="me-2"/>
+                        </div>
+                        <label for="externalCarrierId" class="custom-control-label">@Localizer["#USEEXTERNALCARRIERIDINFO"]</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider"/>
+        <section>
+            <div>
+                @{
+                    var trolleyLocationsTooltip = $"{Localizer["#LASTMODIFIEDBY"]}: <i>{TrolleyLocationsOptions.UpdatedByDisplayName}</i>. <br> {Localizer["#LASTMODIFIEDAT"]}: <i>{TrolleyLocationsOptions.UpdatedAtDisplayName}.</i>";
+                }
+                <SfTooltip Target="#trolleyLocationsLabel" Content="@trolleyLocationsTooltip" Position="Syncfusion.Blazor.Popups.Position.BottomLeft" OffsetX="30"></SfTooltip>
+                <h5 id="trolleyLocationsLabel" class="Project-header">@Localizer["#TROLLEYLOCATIONS"]</h5>
+            </div>
+            <div class="Project-content">
+                <div class="d-flex">
+                    <h6>@Localizer["#USETROLLEYLOCATIONS"]</h6>
+                    <div hidden="@TrolleyLocationsOptions.SiteOverride" class="mx-1 opacity-50">
+                        <Spa.Client.Shared.Icons.TenantLock Width="20" Height="20" Title="@Localizer["#LOCKEDONTENANTLEVEL"]" CssClass="align-text-top" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="d-flex">
+                        <div>
+                            <SfSwitch ID="trolleyLocations" @bind-Checked="TrolleyLocationsOptions.UseTrolleyLocations" Disabled="@(!TrolleyLocationsOptions.SiteOverride)" CssClass="me-2" />
+                        </div>
+                        <label for="trolleyLocations" class="custom-control-label">@Localizer["#USETROLLEYLOCATIONSINFO"]</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider" />
+		<!-- code end -->
+        <section>
+            <div>
+                @{
+                    var productLocationsTooltip = $"{Localizer["#LASTMODIFIEDBY"]}: <i>{CustomProductLocationsOptions.UpdatedByDisplayName}</i>. <br> {Localizer["#LASTMODIFIEDAT"]}: <i>{CustomProductLocationsOptions.UpdatedAtDisplayName}.</i>";
+                }
+                <SfTooltip Target="#ProductLocationsLabel" Content="@productLocationsTooltip" Position="Syncfusion.Blazor.Popups.Position.BottomLeft" OffsetX="30"></SfTooltip>
+                <h5 id="ProductLocationsLabel" class="Project-header">@Localizer["#PRODUCTLOCATIONS"]</h5>
+            </div>
+            <div class="Project-content">
+                <div class="d-flex">
+                    <h6>@Localizer["#CUSTOMPRODUCTLOCATIONS"]</h6>
+                    <div hidden="@CustomProductLocationsOptions.CustomProductLocationsSiteOverride" class="mx-1 opacity-50">
+                        <Spa.Client.Shared.Icons.TenantLock Width="20" Height="20" Title="@Localizer["#LOCKEDONTENANTLEVEL"]" CssClass="align-text-top"/>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="d-flex">
+                        <div>
+                            <SfSwitch ID="customProductlocations" @bind-Checked="CustomProductLocationsOptions.UseCustomProductLocations" Disabled="@(!CustomProductLocationsOptions.CustomProductLocationsSiteOverride)" CssClass="me-2"/>
+                        </div>
+                        <label for="customProductlocations" class="custom-control-label">@Localizer["#USECUSTOMPRODUCTLOCATIONSINFO"]</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider"/>
+        <section>
+            <div>
+                @{
+                    var picklistOptionsTooltip = $"{Localizer["#LASTMODIFIEDBY"]}: <i>{PicklistInactivityOptions.UpdatedByDisplayName}</i>. <br> {Localizer["#LASTMODIFIEDAT"]}: <i>{PicklistInactivityOptions.UpdatedAt:yyyy-MM-dd HH:mm}.</i>";
+                }
+                <SfTooltip Target="#PicklistLabel" Content="@picklistOptionsTooltip" Position="@Position.BottomLeft" OffsetX="30"></SfTooltip>
+                <h5 id="PicklistLabel" class="Project-header">@Localizer["#PICKLIST"]</h5>
+            </div>
+            <div class="Project-content">
+                <div class="d-sm-flex justify-content-between">
+                    <div class="d-flex">
+                            <h6>@Localizer["#AUTOMATICALLYRELEASEINACTIVEPICKLIST"]</h6>
+                        <div hidden="@PicklistInactivityOptions.PicklistInactivitySiteOverride" class="mx-1 opacity-50">
+                            <Spa.Client.Shared.Icons.TenantLock Width="20" Height="20" Title="@Localizer["#LOCKEDONTENANTLEVEL"]" CssClass="align-text-top"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <SfSwitch ID="autorelease" @bind-Checked="PicklistInactivityOptions.UseAutoReleaseOfPicklist" Disabled="@(!PicklistInactivityOptions.PicklistInactivitySiteOverride)" CssClass="me-2"/>
+                        </div>
+                        <label for="autorelease" class="custom-control-label">@Localizer["#AUTOMATICALLYRELEASEINACTIVEPICKLISTINFO"]</label>
+                        <ProjectTooltip TooltipText="@Localizer["#AUTOMATICALLYRELEASEINACTIVEPICKLISTTOOLTIP"]"/>
+                    </div>
+                </div>
+
+                @if (PicklistInactivityOptions.UseAutoReleaseOfPicklist)
+                {
+                    <div class="row mb-3">
+                        <h6>@Localizer["#PICKLISTINACTIVITYTIMETRESHOLD"]</h6>
+                        <label class="form-label">@Localizer["#PICKLISTINACTIVITYTRESHOLDINFO"]</label>
+                        <div class="d-flex col-12 col-lg-8 col-xl-6">
+                            <SfNumericTextBox ID="timespanminutes" Min="10" @bind-Value="PicklistInactivityOptions.PreparationStatesInactivityThresholdInMinutes" Readonly="@(!PicklistInactivityOptions.PicklistInactivitySiteOverride)" TValue="int" Step="1" CssClass="me-2" Placeholder="@Localizer["#MINUTES"]" FloatLabelType="FloatLabelType.Auto"/>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="form-label">@Localizer["#PICKLISTINACTIVITYINPROGRESSTRESHOLDINFO"]</label>
+                        <div class="d-flex col-12 col-lg-8 col-xl-6">
+                            <SfNumericTextBox ID="timespanminutes" Min="10" @bind-Value="PicklistInactivityOptions.InProgressStatesInactivityThresholdInMinutes" Readonly="@(!PicklistInactivityOptions.PicklistInactivitySiteOverride)" TValue="int" Step="1" CssClass="me-2" Placeholder="@Localizer["#MINUTES"]" FloatLabelType="FloatLabelType.Auto"/>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+}
+
+@if (!Loading && (PickSlotOptions != null))
+{
+    <div class="row mt-5">
+        <div class="col-xl-4 col-lg-6 d-flex justify-content-end">
+            <LoadingButton OnClick="async () => { Saving = true; await Save(); Saving = false; }" Loading="Saving" Type="submit" Class="primary">@Localizer["#UPDATE"]</LoadingButton>
+        </div>
+    </div>
+}
+
+
+
+<style>
+    #PRODUCTSECONDARYIDENTIFIERTOOLTIP {
+        display: inline;
+        cursor: pointer;
+    }
+
+    #PRODUCTTERTIARYIDENTIFIERTOOLTIP {
+        display: inline;
+        cursor: pointer;
+    }
+</style>
